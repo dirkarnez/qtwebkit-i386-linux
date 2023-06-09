@@ -21,6 +21,9 @@ jobs:
         sudo apt-get install build-essential \
         2to3 python2-minimal python2 dh-python python-is-python3 \
         libunwind-dev \
+        build-essential xorg-dev libx11-dev libcairo2-dev libc6-dev-i386 && \
+        libxext-dev libxft-dev libxinerama-dev libpng-dev libjpeg-dev libgl1-mesa-dev libglu1-mesa-dev && \
+        gcc-multilib g++-multilib && \
         libgl1-mesa-dev libglu1-mesa-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libicu-dev libjpeg-dev libpng-dev libsqlite3-dev libssl-dev libwebp-dev libxml2-dev libxslt1-dev ruby
 
     - name: Download and extract Qt 4.8.7
