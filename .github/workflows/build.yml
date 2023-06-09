@@ -1,0 +1,45 @@
+name: Build QtWebkit for i386 Linux
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install build-essential libgl1-mesa-dev libglu1-mesa-dev libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev libicu-dev libjpeg-dev libpng-dev libsqlite3-dev libssl-dev libwebp-dev libxml2-dev libxslt1-dev python ruby
+
+    - name: Download and extract Qt 4.8.7
+      run: |
+        wget http://download.qt.io/archive/qt/4.8/4.8.7/qt-everywhere-opensource-src-4.8.7.tar.gz
+        tar -xvf qt-everywhere-opensource-src-4.8.7.tar.gz
+
+    - name: Configure and build Qt 4.8.7
+      run: |
+        cd qt-everywhere-opensource-src-4.8.7
+        ./configure -opensource -confirm-license -prefix /usr/local/qt4-i386 -arch i386 -no-webkit -no-phonon -no-phonon-backend -no-scripttools -nomake examples -nomake tests
+        make -j$(nproc)
+
+    - name: Download and extract QtWebkit 2.3.4
+      run: |
+        wget https://github.com/qtwebkit/qtwebkit/releases/download/qtwebkit-2.3.4/qtwebkit-2.3.4.tar.xz
+        tar -xvf qtwebkit-2.3.4.tar.xz
+
+    - name: Build QtWebkit 2.3.4
+      run: |
+        cd qtwebkit-2.3.4
+        /usr/local/qt4-i386/bin/qmake
+        make -j$(nproc)
+
+    - name: Install QtWebkit 2.3.4
+      run: |
+        cd qtwebkit-2.3.4
+        sudo make install
